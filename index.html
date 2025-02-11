@@ -32,61 +32,70 @@
 
       <!-- Right Form -->
       <form id="roofingForm" class="bg-white p-6 rounded-lg shadow-lg">
-        <h2 class="text-xl font-bold mb-4">Get Your Free Roofing Estimate</h2>
-      
-        <!-- City -->
-        <label class="block mb-2 font-medium">City</label>
-        <input type="text" id="city" name="city" required class="w-full border p-2 rounded">
-      
-        <!-- State -->
-        <label class="block mt-4 mb-2 font-medium">State</label>
-        <input type="text" id="state" name="state" required maxlength="2" class="w-full border p-2 rounded">
-      
-        <!-- Zip Code -->
-        <label class="block mt-4 mb-2 font-medium">ZIP Code</label>
-        <input type="text" id="zip" name="zip" required pattern="\d{5}" class="w-full border p-2 rounded">
-      
-        <!-- Project Type -->
-        <label class="block mt-4 mb-2 font-medium">Project Type</label>
-        <select id="project_type" name="project_type" required class="w-full border p-2 rounded">
-          <option value="Repair">Repair</option>
-          <option value="Replace">Replace</option>
-        </select>
-      
-        <!-- Roof Material -->
-        <label class="block mt-4 mb-2 font-medium">Roof Material</label>
-        <select id="roof_material" name="roof_material" required class="w-full border p-2 rounded">
-          <option value="Asphalt Shingle">Asphalt Shingle</option>
-          <option value="Metal">Metal</option>
-          <option value="Tile">Tile</option>
-          <option value="Cedar">Cedar</option>
-          <option value="Slate">Slate</option>
-          <option value="Flat">Flat</option>
-          <option value="Clay">Clay</option>
-          <option value="Wood">Wood</option>
-          <option value="Other">Other</option>
-        </select>
-      
-        <!-- Homeowner -->
-        <label class="block mt-4 mb-2 font-medium">Are you the homeowner?</label>
-        <select id="homeowner" name="homeowner" required class="w-full border p-2 rounded">
-          <option value="Yes">Yes</option>
-          <option value="No">No</option>
-        </select>
-      
-        <!-- TCPA Checkbox -->
-        <div class="mt-6 flex items-center">
-          <input type="checkbox" id="tcpa_agree" class="w-4 h-4">
-          <label for="tcpa_agree" class="ml-2 text-sm text-gray-700">
-            By clicking this box, you agree to be contacted by partners via email, SMS, or phone.
-          </label>
-        </div>
-      
-        <!-- Submit Button -->
-        <button type="submit" id="submitBtn" class="mt-6 w-full bg-gray-400 text-white py-3 rounded-lg cursor-not-allowed" disabled>
-          Submit
-        </button>
-      </form>
+  <h2 class="text-xl font-bold mb-4">Get Your Free Roofing Estimate</h2>
+
+  <!-- City -->
+  <label class="block mb-2 font-medium">City</label>
+  <input type="text" id="city" name="city" required class="w-full border p-2 rounded">
+
+  <!-- State -->
+  <label class="block mt-4 mb-2 font-medium">State</label>
+  <input type="text" id="state" name="state" required maxlength="2" class="w-full border p-2 rounded">
+
+  <!-- Zip Code -->
+  <label class="block mt-4 mb-2 font-medium">ZIP Code</label>
+  <input type="text" id="zip" name="zip" required pattern="\d{5}" class="w-full border p-2 rounded">
+
+  <!-- Project Type -->
+  <label class="block mt-4 mb-2 font-medium">Project Type</label>
+  <select id="project_type" name="project_type" required class="w-full border p-2 rounded">
+    <option value="">Select</option>
+    <option value="Repair">Repair</option>
+    <option value="Replace">Replace</option>
+  </select>
+
+  <!-- Roof Material -->
+  <label class="block mt-4 mb-2 font-medium">Roof Material</label>
+  <select id="roof_material" name="roof_material" required class="w-full border p-2 rounded">
+    <option value="">Select</option>
+    <option value="Asphalt Shingle">Asphalt Shingle</option>
+    <option value="Metal">Metal</option>
+    <option value="Tile">Tile</option>
+    <option value="Cedar">Cedar</option>
+    <option value="Slate">Slate</option>
+    <option value="Flat">Flat</option>
+    <option value="Clay">Clay</option>
+    <option value="Wood">Wood</option>
+    <option value="Other">Other</option>
+  </select>
+
+  <!-- Homeowner -->
+  <label class="block mt-4 mb-2 font-medium">Are you the homeowner?</label>
+  <select id="homeowner" name="homeowner" required class="w-full border p-2 rounded">
+    <option value="">Select</option>
+    <option value="Yes">Yes</option>
+    <option value="No">No</option>
+  </select>
+
+  <!-- TCPA Checkbox -->
+  <div class="mt-6 flex items-center">
+    <input type="checkbox" id="tcpa_agree" class="w-4 h-4">
+    <label for="tcpa_agree" class="ml-2 text-sm text-gray-700">
+      By clicking this box, you agree to be contacted by partners via email, SMS, or phone.
+    </label>
+  </div>
+
+  <!-- Submit Button -->
+  <button type="submit" id="submitBtn" class="mt-6 w-full bg-gray-400 text-white py-3 rounded-lg cursor-not-allowed" disabled>
+    Submit
+  </button>
+</form>
+
+<!-- Благодарственное сообщение (скрыто) -->
+<div id="thankYouMessage" class="hidden bg-white p-6 rounded-lg shadow-lg text-center">
+  <h2 class="text-2xl font-bold text-gray-900">Thank You!</h2>
+  <p class="text-gray-600 mt-4">Our partners will contact you shortly.</p>
+</div>
     </div>
   </section>
   <section class="bg-white py-16">
@@ -373,9 +382,26 @@
       submitBtn.classList.toggle("bg-gray-400", !this.checked);
       submitBtn.classList.toggle("cursor-not-allowed", !this.checked);
     });
+    function validateForm() {
+  const isFormFilled = [...form.elements].every(input => {
+    if (input.required) {
+      return input.type === "checkbox" ? input.checked : input.value.trim() !== "";
+    }
+    return true;
+  });
+
+  submitBtn.disabled = !isFormFilled;
+  submitBtn.classList.toggle("bg-blue-500", isFormFilled);
+  submitBtn.classList.toggle("bg-gray-400", !isFormFilled);
+  submitBtn.classList.toggle("cursor-not-allowed", !isFormFilled);
+}
+
+// Отслеживание изменений в полях
+form.addEventListener("input", validateForm);
+checkBox.addEventListener("change", validateForm);
     
-    document.getElementById("roofingForm").addEventListener("submit", async function(event) {
-      event.preventDefault();
+form.addEventListener("submit", async function(event) {
+  event.preventDefault();
     
       const formData = {
         Key: "6d26d472694a5b86a5fc4a65d165069e2e09c11f0cd4ac3209e4fd98370f98cd",
@@ -420,6 +446,9 @@
         return "0.0.0.0";
       }
     }
+      form.classList.add("hidden");
+  thankYouMessage.classList.remove("hidden");
+});
     </script>
 </body>
 </html>
