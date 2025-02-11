@@ -398,16 +398,15 @@
         const response = await fetch("https://my1eqp4k17.execute-api.us-east-1.amazonaws.com/prod/vendorPing", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData)
+          body: JSON.stringify(formData),
+          mode: "no-cors"
         });
     
-        const result = await response.json();
-        console.log("Response:", result);
-        alert(result.response.status === "Matched" ? "Lead submitted successfully!" : "Lead not matched.");
-      } catch (error) {
-        console.error("Error:", error);
-        alert("Error submitting lead.");
-      }
+      alert("Lead submitted! (No response from server due to no-cors)");
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Error submitting lead.");
+    }
     });
     
     // Функция получения IP пользователя
